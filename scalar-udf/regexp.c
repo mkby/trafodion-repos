@@ -65,14 +65,16 @@ SQLUDR_LIBFUNC SQLUDR_INT32 regexpmatch(SQLUDR_VC_STRUCT *srcStr,    //input str
         z = regcomp(&reg, pattern, cflags);
         if (z != 0){
           (*out1) = -1;
-		return SQLUDR_ERROR;
+	  regfree(&reg); 
+	  return SQLUDR_ERROR;
         }
-		z = regexec(&reg, srcStr->data, nmatch, pm, 0);
+	z = regexec(&reg, srcStr->data, nmatch, pm, 0);
         if (z == REG_NOMATCH) 
-			(*out1) = 1;
+	    (*out1) = 1;
 		else
             (*out1) = 0;
     }
+    regfree(&reg);
     return SQLUDR_SUCCESS;
 }
 /* HOW to use it?
